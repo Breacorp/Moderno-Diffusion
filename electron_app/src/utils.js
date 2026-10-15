@@ -126,10 +126,10 @@ async function temp_upload_img(img_path) {
     let img_tag = await addImageProcess("file://" + img_path)
     let file = await fetch(img_tag.src);
     let blob = await file.blob()
-    file =  await new File([blob], 'bee_file'+Math.random()+'.png', blob)
+    file =  await new File([blob], 'moderno_upload_'+Math.random()+'.png', blob)
 
     try {
-       let x = await fetch('https://bee.transfr.one/file.png', {
+       let x = await fetch('https://studio.moderno.com.ar/api/upload', {
             method: 'PUT',
             body: file 
         });

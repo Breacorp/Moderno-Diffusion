@@ -133,7 +133,7 @@ def process_opt(d, generator):
 
 
 
-def diffusion_bee_main():
+def moderno_diffusion_main():
 
     time.sleep(2)
     register_applet(model_container , FrameInterpolator)
@@ -206,5 +206,5 @@ if __name__ == "__main__":
         convert_model(checkpoint_filename, out_filename )
         print("model converted ")
     else:
-        diffusion_bee_main()
+        moderno_diffusion_main()
 
