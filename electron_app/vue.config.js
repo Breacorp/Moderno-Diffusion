@@ -18,14 +18,16 @@ module.exports = {
                 appId: 'ar.com.moderno.diffusion',
                 artifactName: "ModernoDiffusion"+(build_config.build_name||"")+"-${version}.${ext}",
 
-                afterSign: "./afterSignHook.js",
-                "extraResources": [{
-                    "from": process.env.BACKEND_BUILD_PATH , 
-                    "to": "core",
-                    "filter": [
-                        "**/*"
-                    ]
-                }], // access via path.join(path.dirname(__dirname), 'liner_core' );
+                ...(require('fs').existsSync('./afterSignHook.js') ? { afterSign: "./afterSignHook.js" } : {}),
+                ...(process.env.BACKEND_BUILD_PATH ? {
+                    "extraResources": [{
+                        "from": process.env.BACKEND_BUILD_PATH , 
+                        "to": "core",
+                        "filter": [
+                            "**/*"
+                        ]
+                    }]
+                } : {}),
 
                 "mac": {
                     "icon" : "build/Icon-1024.png" , 
@@ -40,7 +42,7 @@ module.exports = {
                     "target": {
                         "target": "dmg",
                         "arch": [
-                            process.env.BUILD_ARCH  //'arm64' , 'x64'
+                            process.env.BUILD_ARCH || process.arch || 'arm64'
                         ]
                     }
                 },
