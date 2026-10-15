@@ -161,12 +161,12 @@ app.on('ready', async () => {
 
 // set the about panel 
 app.setAboutPanelOptions({
-	applicationName: require('../package.json').name, 
+	applicationName: "Moderno Diffusion", 
 	applicationVersion: require('../package.json').version,
 	version: require('../package.json').build_number,
-	credits: require('../package.json').description,
-	copyright: "Copyright © 2023 " + require('../package.json').name,
-	website: require('../package.json').website
+	credits: "Desarrollado por Moderno Tech para creadores de Moderno Studio. Suite de inferencia generativa local privada y de alto rendimiento.",
+	copyright: "Copyright © 2026 Moderno Tech. Todos los derechos reservados. (moderno.com.ar)",
+	website: "https://diffusion.moderno.com.ar"
 });
 
 
