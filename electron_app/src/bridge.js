@@ -19,11 +19,23 @@ function start_bridge() {
 
     let script_path = process.env.PY_SCRIPT || "../backends/stable_diffusion/backend.py"; 
     let bin_path =  process.env.BIN_PATH;
+    
+    // Resolve python binary from venv if present
+    let possible_venvs = [
+        path.resolve(process.cwd(), '.venv', 'bin', 'python'),
+        path.resolve(process.cwd(), '..', '.venv', 'bin', 'python'),
+        path.resolve(__dirname, '..', '.venv', 'bin', 'python'),
+        path.resolve(__dirname, '..', '..', '.venv', 'bin', 'python'),
+    ];
+    let venv_python = possible_venvs.find(p => fs.existsSync(p));
+    let python_cmd = venv_python || 'python3';
+    console.log("Using Python interpreter:", python_cmd);
+
     if(bin_path && (fs.existsSync(script_path))){
         python = require('child_process').spawn( bin_path );
     }
     else if (fs.existsSync(script_path)) {
-        python = require('child_process').spawn('python', [script_path]);
+        python = require('child_process').spawn(python_cmd, [script_path]);
     }
     else{
         const path = require('path');
