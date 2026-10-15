@@ -265,10 +265,10 @@ export default {
             } else if( this.sd_options.selected_sd_model == "Default_SDB_0.1"){
                 ret.push( { 
                     id : 'Default_SDB_0.1' , 
-                    filename: 'SDB_0.1.tdict' ,   
+                    filename: 'moderno-fast-0.1.tdict' ,   
                     md5: 'aabb73c2fd2de59edd70cf117e464677' , 
                     is_stock_model : true,
-                    url : 'https://huggingface.co/divamgupta/stable_diffusion_mps/resolve/main/SDB_0.1.tdict' , 
+                    url : 'https://huggingface.co/ModernoTech/moderno-diffusion-fast-0.1/resolve/main/moderno-fast-0.1.tdict' , 
                     title: "Moderno Fast 0.1 (Ligero)", 
                     model_meta_data : {"type" : "sd_model", "float_type" : "float16" ,  "sd_type" : "SD_1x" }
                 } )
