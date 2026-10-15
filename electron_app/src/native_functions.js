@@ -603,61 +603,88 @@ ipcMain.on('download-file', (event, url, dest, downloadId) => {
   
   const fs = require('fs');
   const path = require('path');
-
-  const file = fs.createWriteStream(dest);
   const request = require('request');
-
   const crypto = require('crypto');
 
+  const file = fs.createWriteStream(dest);
   let hash = crypto.createHash('md5');
+  let isHashFinalized = false;
+  let hasEnded = false;
 
-  request.get({
+  const req = request.get({
       url,
       followRedirect: true,
       rejectUnauthorized: false, // ignore SSL certificate errors,
-      timeout: 20000 , //20s
-    })
-    .on('response', response => {
+      timeout: 30000 , //30s
+    });
+
+  req.on('response', response => {
       const totalBytes = parseInt(response.headers['content-length'], 10);
       let downloadedBytes = 0;
 
       response.on('data', chunk => {
         downloadedBytes += chunk.length;
-        hash.update(chunk);
-        const progress = Math.round((downloadedBytes / totalBytes) * 100);
+        if (!isHashFinalized) {
+          try {
+            hash.update(chunk);
+          } catch (e) {
+            console.error("Hash update error:", e);
+          }
+        }
+        const progress = totalBytes ? Math.round((downloadedBytes / totalBytes) * 100) : 50;
         try { 
            event.sender.send(`to_download`, {fn:'progress' , download_id: downloadId , msg:progress });
         } catch (err) {
-            console.log(err)
+            console.log(err);
         }
-        
       });
 
       response.pipe(file);
+    });
 
-    })
-    .on('error', err => {
+  req.on('error', err => {
+      isHashFinalized = true;
+      hasEnded = true;
       fs.unlink(dest, () => {});
 
-        try {
-           event.sender.send(`to_download`, {fn:'error' , download_id: downloadId , msg:err.message  });
-        } catch (err) {
-           console.log(err)
-        }
-        
-      
-    })
-    .on('end', () => {
-
-        const hashValue = hash.digest('hex');
-        
-        try {
-           event.sender.send(`to_download`, {fn:'success' , download_id: downloadId , msg: hashValue  });
-        } catch (err) {
-           console.log(err)
-        }
-        
+      try {
+         event.sender.send(`to_download`, {fn:'error' , download_id: downloadId , msg:err.message  });
+      } catch (e) {
+         console.log(e);
+      }
     });
+
+  file.on('finish', () => {
+      if (hasEnded) return;
+      hasEnded = true;
+      
+      let hashValue = '';
+      if (!isHashFinalized) {
+        try {
+          hashValue = hash.digest('hex');
+          isHashFinalized = true;
+        } catch (e) {
+          console.error("Hash digest error:", e);
+        }
+      }
+
+      try {
+         event.sender.send(`to_download`, {fn:'success' , download_id: downloadId , msg: hashValue  });
+      } catch (err) {
+         console.log(err);
+      }
+    });
+
+  file.on('error', err => {
+      isHashFinalized = true;
+      hasEnded = true;
+      fs.unlink(dest, () => {});
+      try {
+         event.sender.send(`to_download`, {fn:'error' , download_id: downloadId , msg:err.message  });
+      } catch (e) {
+         console.log(e);
+      }
+  });
 });
 
 
