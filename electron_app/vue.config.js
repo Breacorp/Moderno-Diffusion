@@ -19,15 +19,22 @@ module.exports = {
                 artifactName: "ModernoDiffusion"+(build_config.build_name||"")+"-${version}.${ext}",
 
                 ...(require('fs').existsSync('./afterSignHook.js') ? { afterSign: "./afterSignHook.js" } : {}),
-                ...(process.env.BACKEND_BUILD_PATH ? {
-                    "extraResources": [{
+                "extraResources": [
+                    ...(process.env.BACKEND_BUILD_PATH ? [{
                         "from": process.env.BACKEND_BUILD_PATH , 
                         "to": "core",
                         "filter": [
                             "**/*"
                         ]
-                    }]
-                } : {}),
+                    }] : []),
+                    {
+                        "from": "../backends",
+                        "to": "backends",
+                        "filter": [
+                            "**/*"
+                        ]
+                    }
+                ],
 
                 "mac": {
                     "icon" : "build/Icon-1024.png" , 

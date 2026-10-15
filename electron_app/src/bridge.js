@@ -17,30 +17,51 @@ function start_bridge() {
     console.log("starting bridge")
     const fs = require('fs')
 
-    let script_path = process.env.PY_SCRIPT || "../backends/stable_diffusion/backend.py"; 
-    let bin_path =  process.env.BIN_PATH;
+    // Resolve backend script path
+    let candidate_scripts = [
+        process.env.PY_SCRIPT,
+        path.resolve(process.resourcesPath || '', 'backends', 'stable_diffusion', 'backend.py'),
+        path.resolve(__dirname, '..', '..', 'backends', 'stable_diffusion', 'backend.py'),
+        path.resolve(__dirname, '..', 'backends', 'stable_diffusion', 'backend.py'),
+        path.resolve(process.cwd(), 'backends', 'stable_diffusion', 'backend.py'),
+        path.resolve(process.cwd(), '..', 'backends', 'stable_diffusion', 'backend.py'),
+        "../backends/stable_diffusion/backend.py"
+    ].filter(Boolean);
+    let script_path = candidate_scripts.find(p => fs.existsSync(p));
+
+    let bin_path = process.env.BIN_PATH;
     
     // Resolve python binary from venv if present
     let possible_venvs = [
+        path.resolve(process.resourcesPath || '', '.venv', 'bin', 'python'),
         path.resolve(process.cwd(), '.venv', 'bin', 'python'),
         path.resolve(process.cwd(), '..', '.venv', 'bin', 'python'),
         path.resolve(__dirname, '..', '.venv', 'bin', 'python'),
         path.resolve(__dirname, '..', '..', '.venv', 'bin', 'python'),
+        '/Users/joseluis/proyectos/SDifussion/diffusion-stable-diffusion-ui-master/.venv/bin/python'
     ];
     let venv_python = possible_venvs.find(p => fs.existsSync(p));
     let python_cmd = venv_python || 'python3';
     console.log("Using Python interpreter:", python_cmd);
+    console.log("Using Backend script path:", script_path);
 
-    if(bin_path && (fs.existsSync(script_path))){
-        python = require('child_process').spawn( bin_path );
+    let backend_binary = path.join(path.dirname(__dirname), 'core', 'backend');
+    if (!fs.existsSync(backend_binary) && process.resourcesPath) {
+        backend_binary = path.join(process.resourcesPath, 'core', 'backend');
     }
-    else if (fs.existsSync(script_path)) {
+
+    if (bin_path && script_path && fs.existsSync(bin_path)) {
+        python = require('child_process').spawn(bin_path);
+    }
+    else if (backend_binary && fs.existsSync(backend_binary)) {
+        python = require('child_process').spawn(backend_binary);
+    }
+    else if (script_path && fs.existsSync(script_path)) {
         python = require('child_process').spawn(python_cmd, [script_path]);
     }
-    else{
-        const path = require('path');
-        let backend_path =  path.join(path.dirname(__dirname), 'core' , 'backend' );
-        python = require('child_process').spawn( backend_path  );
+    else {
+        console.error("No valid backend found. Fallback spawn.");
+        python = require('child_process').spawn(python_cmd, [candidate_scripts[0] || 'backend.py']);
     }
     
    
