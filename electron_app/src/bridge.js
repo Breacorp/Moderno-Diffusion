@@ -46,12 +46,14 @@ function start_bridge() {
     console.log("Using Backend script path:", script_path);
 
     let possible_backend_binaries = [
-        path.join(path.dirname(__dirname), 'core', 'diffusionbee_backend'),
+        path.join(path.dirname(__dirname), 'core', 'moderno_backend'),
         path.join(path.dirname(__dirname), 'core', 'backend'),
-        process.resourcesPath ? path.join(process.resourcesPath, 'core', 'diffusionbee_backend') : null,
+        process.resourcesPath ? path.join(process.resourcesPath, 'core', 'moderno_backend') : null,
         process.resourcesPath ? path.join(process.resourcesPath, 'core', 'backend') : null,
-        path.resolve(process.cwd(), 'core', 'diffusionbee_backend'),
-        path.resolve(process.cwd(), '..', 'core', 'diffusionbee_backend')
+        path.resolve(process.cwd(), 'core', 'moderno_backend'),
+        path.resolve(process.cwd(), '..', 'core', 'moderno_backend'),
+        path.resolve(process.cwd(), 'core', 'backend'),
+        path.resolve(process.cwd(), '..', 'core', 'backend')
     ].filter(Boolean);
     let backend_binary = possible_backend_binaries.find(p => fs.existsSync(p));
 
