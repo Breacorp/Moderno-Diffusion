@@ -269,7 +269,7 @@ export default {
                     md5: 'aabb73c2fd2de59edd70cf117e464677' , 
                     is_stock_model : true,
                     url : 'https://huggingface.co/ModernoTech/moderno-diffusion-fast-0.1/resolve/main/moderno-fast-0.1.tdict' , 
-                    title: "Moderno Fast 0.1 (Ligero)", 
+                    title: "Moderno Diffusion Fast 0.1 (Ligero)", 
                     model_meta_data : {"type" : "sd_model", "float_type" : "float16" ,  "sd_type" : "SD_1x" }
                 } )
             }
