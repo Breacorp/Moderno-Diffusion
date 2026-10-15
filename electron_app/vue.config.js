@@ -20,6 +20,13 @@ module.exports = {
 
                 ...(require('fs').existsSync('./afterSignHook.js') ? { afterSign: "./afterSignHook.js" } : {}),
                 "extraResources": [
+                    ...(require('fs').existsSync('../core') ? [{
+                        "from": "../core",
+                        "to": "core",
+                        "filter": [
+                            "**/*"
+                        ]
+                    }] : []),
                     ...(process.env.BACKEND_BUILD_PATH ? [{
                         "from": process.env.BACKEND_BUILD_PATH , 
                         "to": "core",

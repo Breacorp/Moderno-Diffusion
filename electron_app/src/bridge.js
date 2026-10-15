@@ -45,18 +45,26 @@ function start_bridge() {
     console.log("Using Python interpreter:", python_cmd);
     console.log("Using Backend script path:", script_path);
 
-    let backend_binary = path.join(path.dirname(__dirname), 'core', 'backend');
-    if (!fs.existsSync(backend_binary) && process.resourcesPath) {
-        backend_binary = path.join(process.resourcesPath, 'core', 'backend');
-    }
+    let possible_backend_binaries = [
+        path.join(path.dirname(__dirname), 'core', 'diffusionbee_backend'),
+        path.join(path.dirname(__dirname), 'core', 'backend'),
+        process.resourcesPath ? path.join(process.resourcesPath, 'core', 'diffusionbee_backend') : null,
+        process.resourcesPath ? path.join(process.resourcesPath, 'core', 'backend') : null,
+        path.resolve(process.cwd(), 'core', 'diffusionbee_backend'),
+        path.resolve(process.cwd(), '..', 'core', 'diffusionbee_backend')
+    ].filter(Boolean);
+    let backend_binary = possible_backend_binaries.find(p => fs.existsSync(p));
 
-    if (bin_path && script_path && fs.existsSync(bin_path)) {
+    if (bin_path && fs.existsSync(bin_path)) {
+        console.log("Spawning custom bin_path:", bin_path);
         python = require('child_process').spawn(bin_path);
     }
     else if (backend_binary && fs.existsSync(backend_binary)) {
+        console.log("Spawning compiled native core backend binary:", backend_binary);
         python = require('child_process').spawn(backend_binary);
     }
     else if (script_path && fs.existsSync(script_path)) {
+        console.log("Spawning Python backend script:", python_cmd, script_path);
         python = require('child_process').spawn(python_cmd, [script_path]);
     }
     else {

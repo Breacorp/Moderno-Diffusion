@@ -447,8 +447,15 @@ function run_realesrgan(input_path , cb ){
     const path = require('path');
     let out_path = "/tmp/"+Math.random()+".png";
     const fs = require('fs');
-    let bin_path =  process.env.REALESRGAN_BIN || path.join(path.dirname(__dirname), 'core' , 'realesrgan_ncnn_macos' );
-    let weights_path = bin_path.replaceAll("realesrgan_ncnn_macos" , "models") + "/";
+    let possible_esrgan_bins = [
+        process.env.REALESRGAN_BIN,
+        path.join(path.dirname(__dirname), 'core', 'realesrgan_ncnn_macos'),
+        process.resourcesPath ? path.join(process.resourcesPath, 'core', 'realesrgan_ncnn_macos') : null,
+        path.resolve(process.cwd(), 'core', 'realesrgan_ncnn_macos'),
+        path.resolve(process.cwd(), '..', 'core', 'realesrgan_ncnn_macos')
+    ].filter(Boolean);
+    let bin_path = possible_esrgan_bins.find(p => fs.existsSync(p)) || possible_esrgan_bins[0];
+    let weights_path = bin_path.replaceAll("realesrgan_ncnn_macos", "models") + "/";
     let proc = require('child_process').spawn( bin_path  , ['-m' , weights_path , '-i' , input_path , '-o' , out_path ]);
 
     console.log([bin_path , '-m' , weights_path , '-i' , input_path , '-o' , out_path ])

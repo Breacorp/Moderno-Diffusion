@@ -20,6 +20,7 @@ from pathlib import Path
 if not ( getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS')):
     print("Adding sys paths")
     dir_path = os.path.dirname(os.path.realpath(__file__))
+    sys.path.insert(0, dir_path)
     sys.path.append(os.path.join(dir_path , "../model_converter"))
 
     model_interface_path = os.environ.get('MODEL_INTERFACE_PATH') or "../stable_diffusion_tf_models"

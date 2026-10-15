@@ -4,6 +4,7 @@ optimized_stable_diffusion/
 
 HF_weights/
 outputs/
+core/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
