@@ -63,7 +63,7 @@ const menu_template = [
         label: 'Learn More',
         click: async () => {
           const { shell } = require('electron')
-          await shell.openExternal('__domain__')
+          await shell.openExternal('https://diffusion.moderno.com.ar')
         }
       }
     ]

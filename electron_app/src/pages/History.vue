@@ -45,16 +45,7 @@
 
                 
                     <div @click="delete_hist(group.key)" style="float:right; margin-top: 10px;"  class="l_button">Delete</div>
-                    <!-- <div @click="share_on_arthub(group)" style="float:right; margin-top: 10px;"  class="l_button">Share</div> -->
-
-                    <b-dropdown left variant="link" size="sm" toggle-class="text-decoration-none" no-caret style="float:right; margin-top: 5px;">
-                        <template #button-content>
-                            <div   class=" l_button "  >
-                                Share 
-                            </div>
-                        </template>
-                        <b-dropdown-item-button   @click="share_on_arthub(group)"  >Share on ArtHub.ai</b-dropdown-item-button>
-                    </b-dropdown>
+                    <!-- Sharing options can be integrated with Moderno Studio -->
 
                     
                     <p class="history_box_info " style="user-select: text;">
