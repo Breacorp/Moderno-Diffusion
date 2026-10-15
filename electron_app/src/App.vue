@@ -36,9 +36,8 @@
 </template>
 <script>
 
-import { bind_app_component } from "./py_vue_bridge.js"
-import { send_to_py } from "./py_vue_bridge.js"
-import {native_confirm, native_alert } from "./native_functions_vue_bridge.js"
+import { bind_app_component, send_to_py } from "./py_vue_bridge.js"
+import { native_alert } from "./native_functions_vue_bridge.js"
 import StableDiffusion from "./StableDiffusion.vue"
 import SDManager from "./SDManager.vue"
 import AssetsManager from "./AssetsManager.vue"
