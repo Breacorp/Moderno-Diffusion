@@ -262,9 +262,9 @@ export default {
                     title: "Stable Diffusion 1.5 (Default)", 
                     model_meta_data : {"type" : "sd_model", "float_type" : "float16" ,  "sd_type" : "SD_1x" }
                 } )
-            } else if( this.sd_options.selected_sd_model == "Default_SDB_0.1"){
+            } else if( this.sd_options.selected_sd_model == "Moderno_Diffusion_Fast_0.1"){
                 ret.push( { 
-                    id : 'Default_SDB_0.1' , 
+                    id : 'Moderno_Diffusion_Fast_0.1' , 
                     filename: 'moderno-fast-0.1.tdict' ,   
                     md5: 'aabb73c2fd2de59edd70cf117e464677' , 
                     is_stock_model : true,

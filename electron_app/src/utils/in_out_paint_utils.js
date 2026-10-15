@@ -16,7 +16,7 @@ function inpaint_assets(self , mode ){
 
     // in generative fill, if a non inpaintgin model selected then it needs the contorlnet inpaint
     if(mode == "Generative Fill"){
-        if((!self.sd_options.selected_sd_model) || self.sd_options.selected_sd_model == "Default_SD1.5" || self.sd_options.selected_sd_model == "Default_SDB_0.1" || 
+        if((!self.sd_options.selected_sd_model) || self.sd_options.selected_sd_model == "Default_SD1.5" || self.sd_options.selected_sd_model == "Moderno_Diffusion_Fast_0.1" || 
             (self.app.assets_manager.all_avail_assets[self.sd_options.selected_sd_model] && (self.app.assets_manager.all_avail_assets[self.sd_options.selected_sd_model].model_meta_data||{}).type == "sd_model" )){
 
             to_download.push( {
