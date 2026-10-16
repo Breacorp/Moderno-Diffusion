@@ -497,11 +497,22 @@ function add_custom_pytorch_models(pytorch_model_path, model_name, convert_param
     
     let out_path =  path.join(homedir , ".modernodiffusion" , "imported_models" , model_name+".tdict" );
     let proc;
-    if (fs.existsSync(script_path)) {
-        proc = require('child_process').spawn( "python3"  , [ script_path ,  "convert_model" ,  pytorch_model_path , out_path ]);
+    let possible_convert_binaries = [
+        path.join(path.dirname(__dirname), 'core', 'moderno_backend'),
+        path.join(path.dirname(__dirname), 'core', 'backend'),
+        process.resourcesPath ? path.join(process.resourcesPath, 'core', 'moderno_backend') : null,
+        process.resourcesPath ? path.join(process.resourcesPath, 'core', 'backend') : null,
+        path.resolve(process.cwd(), 'core', 'moderno_backend'),
+        path.resolve(process.cwd(), 'core', 'backend')
+    ].filter(Boolean);
+    let bin_path = possible_convert_binaries.find(p => fs.existsSync(p));
+
+    if (bin_path && fs.existsSync(bin_path)) {
+        proc = require('child_process').spawn( bin_path , [ "convert_model" ,  pytorch_model_path , out_path ]);
+    } else if (fs.existsSync(script_path)) {
+        proc = require('child_process').spawn( "python3" , [ script_path ,  "convert_model" ,  pytorch_model_path , out_path ]);
     } else {
-        let bin_path =  path.join(path.dirname(__dirname), 'core' , 'backend' );
-        proc = require('child_process').spawn( bin_path  , [ "convert_model" ,  pytorch_model_path , out_path ]);
+        proc = require('child_process').spawn( "python3" , [ "backend.py" ,  "convert_model" ,  pytorch_model_path , out_path ]);
     }
     
 

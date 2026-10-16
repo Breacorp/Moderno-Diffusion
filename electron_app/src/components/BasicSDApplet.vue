@@ -126,6 +126,19 @@ export default {
                 }
             }
 
+            // Map selected LoRAs and weights
+            for(let i = 0; i < 3; i++){
+                let lora_name = options["selected_sd_lora_" + i];
+                if(lora_name && lora_name.toLowerCase() != "none"){
+                    let lpath = this.app.assets_manager.get_downloaded_asset_path(lora_name);
+                    let lweight = options["lora_" + i + "_weight"] || 1;
+                    options.lora_tdict_paths = options.lora_tdict_paths || {};
+                    if(lpath){
+                        options.lora_tdict_paths[lpath] = lweight;
+                    }
+                }
+            }
+
             // if possible get the input image masks and stuff
             if(options.input_img){
                 if(this.get_mask_b64){
@@ -189,6 +202,44 @@ export default {
                 for( let idd of new_ids){
                     if(!el['options'].includes(idd))
                         el['options'].push(idd)
+                }
+            }
+
+            // populate LoRA dropdowns
+            for(let i = 0; i < 3; i++){
+                let lora_el = find_in_form_recursive( "selected_sd_lora_" + i, form);
+                if(lora_el){
+                    let lora_assets = Object.values(this.app.assets_manager.all_avail_assets);
+                    lora_assets = lora_assets.filter(x => x.model_meta_data && ["lora"].includes(x.model_meta_data.type));
+                    let lora_ids = lora_assets.map(x => x.id);
+                    for(let lid of lora_ids){
+                        if(!lora_el['options'].includes(lid))
+                            lora_el['options'].push(lid);
+                    }
+                }
+            }
+
+            // populate visual styles selector
+            let style_el = find_in_form_recursive( "selected_sd_style", form);
+            if(style_el){
+                try {
+                    const stylesData = require('@/assets/styles_data.json');
+                    const reqContext = require.context('@/assets/styles', false, /\.png$/);
+                    for(let s of stylesData){
+                        if(!style_el['options'].includes(s.name)){
+                            style_el['options'].push(s.name);
+                            style_el['option_vals'].push(s.name);
+                            try {
+                                let img = reqContext('./' + s.name + '.small.png');
+                                style_el['images'].push(img);
+                            } catch(err) {
+                                style_el['images'].push('text_' + s.name);
+                            }
+                            style_el['tags'].push((s.tags || []).concat(['All']));
+                        }
+                    }
+                } catch(e) {
+                    console.error("Error populating styles selector:", e);
                 }
             }
 

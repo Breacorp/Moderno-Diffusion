@@ -204,6 +204,19 @@ export default {
 
             if(prompt_params.negative_prompt){
                 prompt_params.negative_prompt = remove_non_ascii(prompt_params.negative_prompt)
+            }
+
+            if(prompt_params.selected_sd_style && prompt_params.selected_sd_style.toLowerCase() != "none"){
+                try {
+                    const stylesData = require('@/assets/styles_data.json');
+                    let target = stylesData.find(s => s.name === prompt_params.selected_sd_style);
+                    if(target){
+                        prompt_params.prompt = target.prompt.replace("{prompt}", prompt_params.prompt || "");
+                        prompt_params.negative_prompt = ((prompt_params.negative_prompt || "") + " " + (target.negative_prompt || "")).trim();
+                    }
+                } catch(e) {
+                    console.error("Error applying style preset:", e);
+                }
             }                
 
             this.last_iter_t = Date.now()

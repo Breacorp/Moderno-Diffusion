@@ -16,11 +16,34 @@
     },
 
     {
-        "id" : "negative_prompt",
+        "id": "negative_prompt",
         "component": "Textarea",
         "placeholder" : "Enter your negative prompt here",
         "is_small" : true,
         "include_in" : ["advanced"]
+    },
+    {
+        "id": "styles_acc",
+        "component": "Accordian",
+        "title": "Styles",
+        "is_default_open": true,
+        "accordian_selected_summary_key": "selected_sd_style",
+        "children": [
+            {
+                "id": "selected_sd_style",
+                "img_tag_id_prefix": "selected_style_img_id",
+                "component": "BetterSelector",
+                "options": ["none"],
+                "default_value": "none",
+                "option_vals": ["none"],
+                "tags": [["All", "Popular"]],
+                "default_selected_tag": "Popular",
+                "images": ["text_No Style"],
+                "icon": "photo",
+                "output_type": "str",
+                "is_persistant": false
+            }
+        ]
     },
     
     {
@@ -387,6 +410,149 @@
 
         ]
     } , 
+
+    {
+        "id": "lora_acc",
+        "component": "Accordian",
+        "title": "LoRA",
+        "include_in": ["advanced"],
+        "children": [
+            {
+                "id": "selected_sd_lora_model_desc",
+                "component": "InputWithDesc",
+                "title": "LoRA 1",
+                "full_width": true,
+                "description": "The Stable Diffusion LoRA to use.",
+                "children": [
+                    {
+                        "id": "selected_sd_lora_0",
+                        "component": "Dropdown",
+                        "options": ["None"],
+                        "full_width": true,
+                        "default_value": "None",
+                        "output_type": "str",
+                        "is_persistant": false
+                    }
+                ]
+            },
+            {
+                "id": "selected_sd_lora_weight_desc",
+                "component": "InputWithDesc",
+                "title": "LoRA 1 Weight",
+                "full_width": true,
+                "cond_exclude_in_AND": [
+                    {
+                        "lhs": "selected_sd_lora_0",
+                        "comparator": "eq",
+                        "rhs": "None"
+                    }
+                ],
+                "description": "Weight for the LoRA.",
+                "children": [
+                    {
+                        "id": "lora_0_weight",
+                        "component": "Slider",
+                        "is_persistant": true,
+                        "max_val": 3,
+                        "output_type": "float",
+                        "min_val": 0.1,
+                        "default_value": 1
+                    }
+                ]
+            },
+            {
+                "id": "selected_sd_lora_model_desc1",
+                "component": "InputWithDesc",
+                "title": "LoRA 2",
+                "full_width": true,
+                "description": "The Stable Diffusion LoRA to use.",
+                "children": [
+                    {
+                        "id": "selected_sd_lora_1",
+                        "component": "Dropdown",
+                        "options": ["None"],
+                        "full_width": true,
+                        "default_value": "None",
+                        "output_type": "str",
+                        "is_persistant": false
+                    }
+                ]
+            },
+            {
+                "id": "selected_sd_lora_weight_desc_1",
+                "component": "InputWithDesc",
+                "title": "LoRA 2 Weight",
+                "full_width": true,
+                "cond_exclude_in_AND": [
+                    {
+                        "lhs": "selected_sd_lora_1",
+                        "comparator": "eq",
+                        "rhs": "None"
+                    }
+                ],
+                "description": "Weight for the LoRA.",
+                "children": [
+                    {
+                        "id": "lora_1_weight",
+                        "component": "Slider",
+                        "is_persistant": true,
+                        "max_val": 3,
+                        "output_type": "float",
+                        "min_val": 0.1,
+                        "default_value": 1
+                    }
+                ]
+            },
+            {
+                "id": "selected_sd_lora_model_desc2",
+                "component": "InputWithDesc",
+                "title": "LoRA 3",
+                "full_width": true,
+                "description": "The Stable Diffusion LoRA to use.",
+                "children": [
+                    {
+                        "id": "selected_sd_lora_2",
+                        "component": "Dropdown",
+                        "options": ["None"],
+                        "full_width": true,
+                        "default_value": "None",
+                        "output_type": "str",
+                        "is_persistant": false
+                    }
+                ]
+            },
+            {
+                "id": "selected_sd_lora_weight_desc_2",
+                "component": "InputWithDesc",
+                "title": "LoRA 3 Weight",
+                "cond_exclude_in_AND": [
+                    {
+                        "lhs": "selected_sd_lora_2",
+                        "comparator": "eq",
+                        "rhs": "None"
+                    }
+                ],
+                "full_width": true,
+                "description": "Weight for the LoRA.",
+                "children": [
+                    {
+                        "id": "lora_2_weight",
+                        "component": "Slider",
+                        "is_persistant": true,
+                        "max_val": 3,
+                        "output_type": "float",
+                        "min_val": 0.1,
+                        "default_value": 1
+                    }
+                ]
+            },
+            {
+                "id": "lora_import_desc",
+                "component": "OutputText",
+                "text": "You can import your LoRA models from the models page."
+            }
+        ]
+    },
 
     {
         "id": "misc_acc",
