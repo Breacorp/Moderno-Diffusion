@@ -124,10 +124,10 @@ def convert_model(checkpoint_filename=None, out_filename=None,  torch_weights=No
 
 
 def usage():
-        print("\nConverts .cpkt model files into .tdict model files for Diffusion Bee")
+        print("\nConverts .ckpt model files into .tdict model files for Moderno Diffusion")
         print("\npython3 convert_py   input.ckpt output.tdict")
         print("\tNormal use.")
-        print("\n\tPlease report any errors on the Diffusion Bee GitHub project or the official Discord server.")
+        print("\n\tPlease report any issues at contacto@moderno.com.ar o en https://moderno.com.ar/ayuda")
         print("\npython3 convert_py --help")
         print("\tDisplays this message")
 
